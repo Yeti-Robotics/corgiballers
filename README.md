@@ -1,3 +1,5 @@
+###FOR CADATHON: motor ids, powers, positions, etc. will be set to arbitrary values that are not tuned or configured to actuality
+
 # How do I use this?
 Make sure you have [git](https://git-scm.com/downloads) installed.
 
