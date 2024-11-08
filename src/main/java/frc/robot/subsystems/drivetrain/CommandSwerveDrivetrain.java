@@ -219,7 +219,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         SmartDashboard.putNumber("distance", distance);
         SmartDashboard.putNumber("gyro spin rate", getPigeon2().getRate());
     }
-
 }
 
 
