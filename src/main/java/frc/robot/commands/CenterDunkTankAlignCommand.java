@@ -11,14 +11,14 @@ import frc.robot.util.LimelightHelpers;
 import java.util.function.DoubleSupplier;
 
 
-public class InboundingBoxAlignCommand extends Command {
+public class CenterDunkTankAlignCommand extends Command {
     private final CommandSwerveDrivetrain drivetrain;
     private final DoubleSupplier xVelSupplier;
     private final AutoAimCommand poseAimRequest;
     private final DoubleSupplier yVelSupplier;
     private double currentTag;
 
-    public InboundingBoxAlignCommand(
+    public CenterDunkTankAlignCommand(
             CommandSwerveDrivetrain drivetrain,
             DoubleSupplier xVelSupplier,
             DoubleSupplier yVelSupplier) {
@@ -38,11 +38,11 @@ public class InboundingBoxAlignCommand extends Command {
     public void initialize() {
         currentTag = LimelightHelpers.getFiducialID(VisionSubsystem.VisionConstants.LIMELIGHT_NAME);
 
-        Translation2d inboundingBox = AllianceFlipUtil.apply(
-                Constants.InboundingBox.inboundingBoxPosition.toTranslation2d()
+        Translation2d centerTank = AllianceFlipUtil.apply(
+                Constants.CenterTank.centerTankPosition.toTranslation2d()
         );
 
-        poseAimRequest.setPointToFace(inboundingBox);
+        poseAimRequest.setPointToFace(centerTank);
     }
 
     @Override

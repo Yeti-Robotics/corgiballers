@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.CenterDunkTankAlignCommand;
+import frc.robot.commands.DunkTankAlignCommand;
 import frc.robot.commands.InboundingBoxAlignCommand;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.generated.TunerConstants;
@@ -47,7 +49,10 @@ public class RobotContainer {
                                         .withRotationalRate(-joystick.getRightX() * CommandSwerveDrivetrain.MaFxAngularRate)
                 ));
 
-        joystick.leftTrigger().onTrue(new InboundingBoxAlignCommand(drivetrain, () -> -joystick.getLeftY(), () -> -joystick.getLeftX()));
+        joystick.leftBumper().whileTrue(new InboundingBoxAlignCommand(drivetrain, () -> -joystick.getLeftY(), () -> -joystick.getLeftX()));
+        joystick.rightBumper().whileTrue(new DunkTankAlignCommand(drivetrain, () -> -joystick.getLeftY(), () -> -joystick.getLeftX()));
+        joystick.a().whileTrue(new CenterDunkTankAlignCommand(drivetrain, () -> -joystick.getLeftY(), () -> -joystick.getLeftX()));
+
     }
 
     public Command getAutonomousCommand() {
