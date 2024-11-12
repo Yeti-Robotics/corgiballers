@@ -39,7 +39,7 @@ public class InboundingBoxAlignCommand extends Command {
         currentTag = LimelightHelpers.getFiducialID(VisionSubsystem.VisionConstants.LIMELIGHT_NAME);
 
         Translation2d speakerCenter = AllianceFlipUtil.apply(
-                Constants.FieldConstants.InboundingBox.inboundingBoxPosition.toTranslation2d()
+                Constants.InboundingBox.inboundingBoxPosition.toTranslation2d()
         );
 
         poseAimRequest.setPointToFace(speakerCenter);

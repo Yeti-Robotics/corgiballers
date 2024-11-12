@@ -7,9 +7,9 @@ public class ControllerContainer {
     private final Controller[] controllers;
 
     public ControllerContainer() {
-        controllers = new Controller[Constants.OIConstants.CONTROLLER_COUNT];
+        controllers = new Controller[Constants.CONTROLLER_COUNT];
 
-        Constants.OIConstants.CONTROLLERS.forEach((port, type) -> {
+        Constants.CONTROLLERS.forEach((port, type) -> {
             switch (type) {
                 case CUSTOM:
                     controllers[port] = new CustomController(port);

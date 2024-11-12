@@ -20,7 +20,7 @@ public class AllianceFlipUtil {
     /** Flips an x coordinate to the correct side of the field based on the current alliance color. */
     public static double apply(double xCoordinate) {
         if (shouldFlip()) {
-            return Constants.FieldConstants.fieldLength - xCoordinate;
+            return Constants.fieldLength - xCoordinate;
         } else {
             return xCoordinate;
         }
