@@ -25,12 +25,9 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import java.util.function.Supplier;
 
-/**
- * Class that extends the Phoenix SwerveDrivetrain class and implements subsystem
- * so it can be used in command-based projects easily.
- */
+
 public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsystem {
-    private static final double kSimLoopPeriod = 0.005; // 5 ms
+    private static final double kSimLoopPeriod = 0.005;
     private final Rotation2d BluePerspectiveRotation = Rotation2d.fromDegrees(0);
     private final Rotation2d RedPerspectiveRotation = Rotation2d.fromDegrees(180);
     private final SwerveRequest.ApplyChassisSpeeds AutoReq = new SwerveRequest.ApplyChassisSpeeds();
@@ -47,27 +44,23 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public static final double PEAK_REVERSE_VOLTAGE = -12.0;
 
     public static final double SWERVE_X_REDUCTION = 1.0 / 6.75;
-    public static final double WHEEL_DIAMETER = Units.inchesToMeters(4); //0.1016
+    public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);
 
-    public static final double MaFxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
+    public static final double MaFxAngularRate = 1.5 * Math.PI;
 
-    public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0 * SWERVE_X_REDUCTION * WHEEL_DIAMETER * Math.PI; //placeholder
+    public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0 / 60.0 * SWERVE_X_REDUCTION * WHEEL_DIAMETER * Math.PI;
 
-    private static final double DRIVETRAIN_WHEELBASE_METERS = Units.inchesToMeters(22.25); //PLACEHOLDER
-    private static final double DRIVETRAIN_TRACKWIDTH_METERS = Units.inchesToMeters(22.25); //PLACEHOLDER
+    private static final double DRIVETRAIN_WHEELBASE_METERS = Units.inchesToMeters(22.25);
+    private static final double DRIVETRAIN_TRACKWIDTH_METERS = Units.inchesToMeters(22.25);
 
     public static final SwerveDriveKinematics DRIVE_KINEMATICS =
             new SwerveDriveKinematics(
-                    // Front left
                     new Translation2d(DRIVETRAIN_WHEELBASE_METERS / 2.0,
                             DRIVETRAIN_TRACKWIDTH_METERS / 2.0),
-                    // Front right
                     new Translation2d(DRIVETRAIN_WHEELBASE_METERS / 2.0,
                             -DRIVETRAIN_TRACKWIDTH_METERS / 2.0),
-                    // Back left
                     new Translation2d(-DRIVETRAIN_WHEELBASE_METERS / 2.0,
                             DRIVETRAIN_TRACKWIDTH_METERS / 2.0),
-                    // Back right
                     new Translation2d(-DRIVETRAIN_WHEELBASE_METERS / 2.0,
                             -DRIVETRAIN_TRACKWIDTH_METERS / 2.0)
             );
@@ -122,13 +115,11 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
 
-        /* Run simulation at a faster rate so PID gains behave more reasonably */
         m_simNotifier = new Notifier(() -> {
             final double currentTime = Utils.getCurrentTimeSeconds();
             double deltaTime = currentTime - m_lastSimTime;
             m_lastSimTime = currentTime;
 
-            /* use the measured time delta, get battery voltage from WPILib */
             updateSimState(deltaTime, RobotController.getBatteryVoltage());
         });
         m_simNotifier.startPeriodic(kSimLoopPeriod);

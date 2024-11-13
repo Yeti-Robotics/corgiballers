@@ -7,14 +7,12 @@ package frc.robot;
 
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.CenterDunkTankAlignCommand;
 import frc.robot.commands.DunkTankAlignCommand;
 import frc.robot.commands.InboundingBoxAlignCommand;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.generated.TunerConstants;
 import frc.robot.util.controllerUtils.ButtonHelper;
@@ -28,6 +26,7 @@ public class RobotContainer {
 
     final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain;
     public final IntakeSubsystem intake = new IntakeSubsystem();
+    public final ShooterSubsystem shooter = new ShooterSubsystem();
 
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(CommandSwerveDrivetrain.MAX_VELOCITY_METERS_PER_SECOND * 0.1)
@@ -44,13 +43,12 @@ public class RobotContainer {
 
 
     private void configureBindings() {
-        drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
+        drivetrain.setDefaultCommand(
                 drivetrain.applyRequest(
                         () ->
                                 drive
                                         .withVelocityX(-joystick.getLeftY() * TunerConstants.kSpeedAt12VoltsMps)
                                         .withVelocityY(-joystick.getLeftX() * TunerConstants.kSpeedAt12VoltsMps)
-                                        // +rotational rate = counterclockwise (left), -X in joystick = left
                                         .withRotationalRate(-joystick.getRightX() * CommandSwerveDrivetrain.MaFxAngularRate)
                 ));
 
@@ -58,6 +56,7 @@ public class RobotContainer {
         joystick.rightBumper().whileTrue(new DunkTankAlignCommand(drivetrain, () -> -joystick.getLeftY(), () -> -joystick.getLeftX()));
         joystick.a().whileTrue(new CenterDunkTankAlignCommand(drivetrain, () -> -joystick.getLeftY(), () -> -joystick.getLeftX()));
         joystick.leftTrigger().whileTrue(intake.rollIn(0));
+        joystick.rightTrigger().whileTrue(shooter.shootElectrolyte(0));
     }
 
     public Command getAutonomousCommand() {
