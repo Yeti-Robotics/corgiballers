@@ -9,6 +9,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModule;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.CenterDunkTankAlignCommand;
@@ -18,12 +19,16 @@ import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.generated.TunerConstants;
 import frc.robot.util.controllerUtils.ButtonHelper;
 import frc.robot.util.controllerUtils.ControllerContainer;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class RobotContainer {
     public ControllerContainer controllerContainer = new ControllerContainer();
     public final CommandXboxController joystick = new CommandXboxController(1);
     ButtonHelper buttonHelper = new ButtonHelper(controllerContainer.getControllers());
+
     final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain;
+    public final IntakeSubsystem intake = new IntakeSubsystem();
+
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(CommandSwerveDrivetrain.MAX_VELOCITY_METERS_PER_SECOND * 0.1)
             .withRotationalDeadband(CommandSwerveDrivetrain.MaFxAngularRate * 0.1)
@@ -52,7 +57,7 @@ public class RobotContainer {
         joystick.leftBumper().whileTrue(new InboundingBoxAlignCommand(drivetrain, () -> -joystick.getLeftY(), () -> -joystick.getLeftX()));
         joystick.rightBumper().whileTrue(new DunkTankAlignCommand(drivetrain, () -> -joystick.getLeftY(), () -> -joystick.getLeftX()));
         joystick.a().whileTrue(new CenterDunkTankAlignCommand(drivetrain, () -> -joystick.getLeftY(), () -> -joystick.getLeftX()));
-
+        joystick.leftTrigger().whileTrue(intake.rollIn(0));
     }
 
     public Command getAutonomousCommand() {

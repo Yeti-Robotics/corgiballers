@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-    public class ShooterConstants{
+    private class ShooterConstants{
         public int SHOOTER_ID = 0;
         public static final double SHOOTER_P = 0;
         public static final double SHOOTER_I = 0;
