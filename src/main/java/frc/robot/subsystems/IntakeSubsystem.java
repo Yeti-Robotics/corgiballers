@@ -1,24 +1,31 @@
 package frc.robot.subsystems;
 
 
+import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.hardware.TalonFX;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-    public class IntaleConstants {
 
+    private static int INTAKE_ID = 0;
+
+    private static final TalonFX intakeMotor = new TalonFX(INTAKE_ID);
+
+    private static double ROLL_IN_POWER = 0;
+
+    private void stop() {
+         intakeMotor.stopMotor();
     }
 
-    private final static IntakeSubsystem INSTANCE = new IntakeSubsystem();
-
-
-    public static IntakeSubsystem getInstance() {
-        return INSTANCE;
+    private void setIntakeSpeed(double speed) {
+        intakeMotor.set(speed);
     }
 
+    private Command roll(double vel){return startEnd(() -> setIntakeSpeed(vel), this::stop);}
 
-    private IntakeSubsystem() {
-
+    public Command rollIn(double vel){
+        return roll(vel);
     }
 }
-
