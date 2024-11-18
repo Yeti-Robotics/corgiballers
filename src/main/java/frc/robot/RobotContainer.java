@@ -15,14 +15,12 @@ import frc.robot.commands.InboundingBoxAlignCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.drivetrain.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drivetrain.generated.TunerConstants;
-import frc.robot.util.controllerUtils.ButtonHelper;
 import frc.robot.util.controllerUtils.ControllerContainer;
 import frc.robot.subsystems.IntakeSubsystem;
 
 public class RobotContainer {
     public ControllerContainer controllerContainer = new ControllerContainer();
     public final CommandXboxController joystick = new CommandXboxController(1);
-    ButtonHelper buttonHelper = new ButtonHelper(controllerContainer.getControllers());
 
     final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain;
     public final IntakeSubsystem intake = new IntakeSubsystem();

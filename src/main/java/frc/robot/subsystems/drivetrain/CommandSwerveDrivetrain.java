@@ -8,6 +8,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -16,8 +17,11 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
+import frc.robot.util.RobotDataPublisher;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -64,6 +68,9 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                     new Translation2d(-DRIVETRAIN_WHEELBASE_METERS / 2.0,
                             -DRIVETRAIN_TRACKWIDTH_METERS / 2.0)
             );
+
+    StructPublisher<Pose2d> posePublisher = NetworkTableInstance.getDefault().
+            getStructTopic("RobotPose", Pose2d.struct).publish();
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
@@ -187,6 +194,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         }
     }
 
+
     @Override
     public void periodic() {
         publisher.set(super.getState().ModuleStates);
@@ -198,17 +206,12 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                 hasAppliedPerspective = true;
             });
         }
-
-
-        Pose2d speakerPose = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue).equals(DriverStation.Alliance.Blue)
-                ? new Pose2d(0.0, 5.55, Rotation2d.fromRotations(0))
-                : new Pose2d(0.0, 2.45, Rotation2d.fromRotations(0));
-
         Pose2d robotPose = this.getState().Pose;
-        Pose2d relativeSpeaker = robotPose.relativeTo(speakerPose);
-        double distance = relativeSpeaker.getTranslation().getNorm();
-        SmartDashboard.putNumber("distance", distance);
-        SmartDashboard.putNumber("gyro spin rate", getPigeon2().getRate());
+        posePublisher.set(robotPose);
+    }
+
+    public StructPublisher <Pose2d> observablePose() {
+        return posePublisher;
     }
 }
 
